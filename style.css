@@ -1,38 +1,42 @@
-header{
-    text-align: center;
-    background-color: rgb(122, 146, 255);
+header {
+  text-align: center;
+  background-color: rgb(122, 146, 255);
 }
 
-ul{
-    position: relative;
-    font-size: 15px;
+ul {
+  position: relative;
+  font-size: 15px;
 }
 
-form{
-    columns: 200px;
-    position: absolute;
-    left: 10%;
+form {
+  columns: 200px;
+  position: absolute;
+  left: 10%;
 }
 
-li{
-    margin-top: 50px;
+li {
+  margin-top: 50px;
 }
 
-table{
-    position: absolute;
-    right: 10%;
+table {
+  position: absolute;
+  right: 10%;
 }
 
-th{
-    margin-top: 50px;
-    background-color:rgb(122, 146, 255);
-    text-align: center;
-    padding: 15px;
-    border-radius: 50px;
+th {
+  margin-top: 50px;
+  background-color: rgb(122, 146, 255);
+  text-align: center;
+  padding: 15px;
+  border-radius: 50px;
 }
 
-td{
-    background-color: rgb(226, 231, 255);
-    text-align: center;
-    border-radius: 50px;
+td {
+  background-color: rgb(226, 231, 255);
+  text-align: center;
+  border-radius: 50px;
+}
+
+button {
+  background-color: red;
 }

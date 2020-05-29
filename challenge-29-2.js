@@ -61,6 +61,7 @@ var app = (function (){
       var $tdYear = document.createElement('td');
       var $tdPlate = document.createElement('td');
       var $tdColor = document.createElement('td');
+      var $tdRemove = document.createElement('td');
 
       $image.setAttribute('src', $('[data-js="image"]').get().value);
       $tdImage.appendChild($image);
@@ -69,12 +70,14 @@ var app = (function (){
       $tdYear.textContent = $('[data-js="year"]').get().value;
       $tdPlate.textContent = $('[data-js="plate"]').get().value;
       $tdColor.textContent = $('[data-js="color"]').get().value;
+      $tdRemove.textContent = $('[data-js="remove"]').get().value;
 
       $tr.appendChild($tdImage);
       $tr.appendChild($tdBrand);
       $tr.appendChild($tdYear);
       $tr.appendChild($tdPlate);
       $tr.appendChild($tdColor);
+      $tr.appendChild($tdRemove);
 
       return $fragment.appendChild($tr);
     },
