@@ -1,35 +1,6 @@
+
 (function ($) {
   "use strict";
-
-  /*
-    Vamos estruturar um pequeno app utilizando módulos.
-    Nosso APP vai ser um cadastro de carros. Vamos fazê-lo por partes.
-    A primeira etapa vai ser o cadastro de veículos, de deverá funcionar da
-    seguinte forma:
-    - No início do arquivo, deverá ter as informações da sua empresa - nome e
-    telefone (já vamos ver como isso vai ser feito) OK!
-    - Ao abrir a tela, ainda não teremos carros cadastrados. Então deverá ter
-    um formulário para cadastro do carro, com os seguintes campos:
-      - Imagem do carro (deverá aceitar uma URL) OK!
-      - Marca / Modelo OK!
-      - Ano OK!
-      - Placa OK!
-      - Cor OK!
-      - e um botão "Cadastrar" OK!
-    Logo abaixo do formulário, deverá ter uma tabela que irá mostrar todos os
-    carros cadastrados. Ao clicar no botão de cadastrar, o novo carro deverá
-    aparecer no final da tabela.
-    Agora você precisa dar um nome para o seu app. Imagine que ele seja uma
-    empresa que vende carros. Esse nosso app será só um catálogo, por enquanto.
-    Dê um nome para a empresa e um telefone fictício, preechendo essas informações
-    no arquivo company.json que já está criado.
-    Essas informações devem ser adicionadas no HTML via Ajax.
-    Parte técnica:
-    Separe o nosso módulo de DOM criado nas últimas aulas em
-    um arquivo DOM.js.
-    E aqui nesse arquivo, faça a lógica para cadastrar os carros, em um módulo
-    que será nomeado de "app".
-    */
 
   var app = (function () {
     return {
@@ -46,9 +17,14 @@
 
       handleSubmit: function handleSubmit(e) {
         e.preventDefault();
+
+        var car = app.setCars();
+
         console.log("Submit");
         var $tableCar = $('[data-js="table-car"]').get();
         $tableCar.appendChild(app.createNewCar());
+        $tableCar.appendChild(app.createNewCar(car));
+        app.postDataStore();
       },
 
       createNewCar: function createNewCar() {
@@ -83,6 +59,62 @@
         $tr.appendChild($tdRemove);
 
         return $fragment.appendChild($tr);
+      },
+
+      setCars: function setCars(){
+        var cars = {
+          image: $('[data-js="image"]').get().value,
+          brandModel: $('[data-js="brand-model"]').get().value,
+          year: $('[data-js="year"]').get().value,
+          plate: $('[data-js="plate"]').get().value,
+          color: $('[data-js="color"]').get().value
+        };
+        return cars;
+      },
+
+      getCars: function getCars(){
+        var ajax = new XMLHttpRequest();
+        ajax.open('GET', 'http://localhost:3000/car', true);
+        ajax.send();
+        ajax.addEventListener('readystatechange', app.handleDataStore, false);
+      },
+
+      handleDataStore: function handleDataStore(){
+        if(app.isReady()){
+          return;
+        }
+        var cars = JSON.parse(this.responseText);
+        var $tableCar = $('[data-js="table-car"]').get();
+
+        cars.forEach(function(car){
+          var $fragment = app.createNewCar(car);
+          $tableCar.appendChild($fragment);
+        });
+      },
+
+      postDataStore: function postDataStore(){
+        var car = app.setCars();
+        var ajax = new XMLHttpRequest();
+        ajax.open('POST', 'http://localhost:3000/car', true);
+        ajax.setRequestHeader(
+          'Content-Type',
+          'application/x-www-form-urlencoded'
+        );
+        ajax.send(
+            'image=' +
+            car.image +
+            '&brandModel=' +
+            car.brandModel +
+            '&year=' +
+            car.year +
+            '&plate=' +
+            car.plate +
+            '&color=' +
+            car.color
+        );
+        ajax.addEventListener('readystatechange', function(){
+          console.log('Carro cadastrado com sucesso!');
+        }, false);
       },
 
       removeCar: function removeCar(event) {
