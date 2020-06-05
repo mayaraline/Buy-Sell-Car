@@ -145,7 +145,6 @@
       removeCar: function removeCar(event) {
         //var $tabel = this.parentNode.parentNode.parentNode;
         var $line = this.parentNode.parentNode;
-        console.log($line);
         var $plate = $line.firstElementChild.nextSibling.nextSibling.nextSibling;
         event.target.parentNode.parentNode.remove();
         app.deleteDataStore($plate.innerHTML);
