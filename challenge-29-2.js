@@ -12,6 +12,7 @@
 
       initEvents: function initEvents() {
         $('[data-js="form-register"]').on("submit", this.handleSubmit);
+        $('[data-js="form-register"]').on("submit", this.cleanFields);
       },
 
       handleSubmit: function handleSubmit(e) {
@@ -23,7 +24,16 @@
         var $tableCar = $('[data-js="table-car"]').get();
         //$tableCar.appendChild(app.createNewCar());
         $tableCar.appendChild(app.createNewCar(car));
+        //$tableCar.appendChild(app.cleanFields());
         app.postDataStore();
+      },
+
+      cleanFields: function cleanFields(){
+        $('[data-js="image"]').get().value = '';
+        $('[data-js="brand-model"]').get().value = '';
+        $('[data-js="year"]').get().value = '';
+        $('[data-js="plate"]').get().value = '';
+        $('[data-js="color"]').get().value = '';
       },
 
       createNewCar: function createNewCar() {
@@ -41,6 +51,12 @@
         $buttonRemove.innerHTML = "Remover";
         $buttonRemove.addEventListener("click", this.removeCar, false);
         $tdRemove.appendChild($buttonRemove);
+
+        // $buttonRemove.addEventListener('click', function(){
+
+        //   var plate = $tableCar.get().rows[$tr.rowIndex].cells[4].innerHTML;
+        //   app.deleteDataStore(`plate=${plate}`);
+        // }, false);
 
         $image.setAttribute("src", $('[data-js="image"]').get().value);
         $tdImage.appendChild($image);
@@ -91,6 +107,16 @@
         });
       },
 
+      deleteDataStore: function deleteDataStore(plate){
+        var ajax = new XMLHttpRequest();
+        ajax.open('DELETE', 'http://localhost:3000/car', true);
+        ajax.setRequestHeader('Content-Type' , 'application/x-www-form-urlencoded');
+        ajax.send(`&plate=`+plate);
+        ajax.addEventListener('readystatechange', function(){
+          console.log('Carro deletado com sucesso!');
+        }, false);
+      },
+
       postDataStore: function postDataStore(){
         var car = app.setCars();
         var ajax = new XMLHttpRequest();
@@ -117,7 +143,12 @@
       },
 
       removeCar: function removeCar(event) {
+        //var $tabel = this.parentNode.parentNode.parentNode;
+        var $line = this.parentNode.parentNode;
+        console.log($line);
+        var $plate = $line.firstElementChild.nextSibling.nextSibling.nextSibling;
         event.target.parentNode.parentNode.remove();
+        app.deleteDataStore($plate.innerHTML);
       },
 
       companyInfo: function companyInfo() {
